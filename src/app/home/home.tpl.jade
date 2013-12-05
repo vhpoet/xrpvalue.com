@@ -1,9 +1,16 @@
+h1 XRP Value
 .row
   .col-xs-6
-    span#asks(ng-show="asks") {{asks}} XRP
-    span#asks(ng-hide="asks") ??? XRP
-    |  can get you 1$
+    .jumbotron
+      div(ng-show="asks")
+        span#asks {{asks}} XRP
+        |  can get you 1$
+      div(ng-hide="asks")
+        | Loading...
   .col-xs-6
-    | 1$ can get you
-    span#bids(ng-show="bids")  {{bids}} XRP
-    span#bids(ng-hide="bids")  ??? XRP
+    .jumbotron
+      div(ng-show="bids")
+        | 1$ can get you
+        span#bids  {{bids}} XRP
+      div(ng-hide="bids")
+        | Loading...
