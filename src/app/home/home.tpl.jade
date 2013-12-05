@@ -16,11 +16,13 @@ h1 XRP Value
   .col-xs-12.col-sm-6
     .value
       div(ng-show="book.bids")
-        | $1 can get you
+        span#bids $1
+        |  can get you
         span#bids  {{book.bids}} XRP
         br
         span#asks {{1/book.bids | number:4}} USD
-        |  can get you 1 XRP.
+        |  can get you
+        span#bids  1 XRP.
       div(ng-hide="book.bids")
         | Loading...
 .row(ng-hide="loaded")
