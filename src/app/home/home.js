@@ -17,6 +17,8 @@ angular.module( 'xrpvalue.home', [
 .controller( 'HomeCtrl', function HomeController( $scope, $rootScope, titleService ) {
   titleService.setTitle('Home');
 
+  // TODO FIX EVERYTHING!!!
+
   $scope.prices = {};
 
   var server = {
@@ -29,7 +31,7 @@ angular.module( 'xrpvalue.home', [
   var remote = new ripple.Remote(server);
   var book;
 
-  var pairs = {
+  var pairsDollars = {
     bitstamp: {
       first: {
         currency: 'USD',
@@ -52,16 +54,38 @@ angular.module( 'xrpvalue.home', [
     }
   };
 
+  var pairsYuan = {
+    RippleCN: {
+      first: {
+        currency: 'CNY',
+        issuer: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK'
+      },
+      second: {
+        currency: 'XRP',
+        issuer: null
+      }
+    },
+    RippleChina: {
+      first: {
+        currency: 'CNY',
+        issuer: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'
+      },
+      second: {
+        currency: 'XRP',
+        issuer: null
+      }
+    }
+  };
+
   var getBook = function (first,second) {
     return remote.book(first.currency, first.issuer,
         second.currency, second.issuer);
   };
 
-  remote.on('connected',function(){
-    console.log('connected');
-
+  var getPrices = function(curr,pairs) {
+    $scope.prices[curr] = {};
     _.each(pairs, function(pair,name){
-      $scope.prices[name] = {};
+      $scope.prices[curr][name] = {};
 
       ['asks','bids'].forEach(function(action){
         var book = action == 'asks'
@@ -89,13 +113,20 @@ angular.module( 'xrpvalue.home', [
             if (order[action === "asks" ? "TakerGets" : "TakerPays"].is_native())
               order.price = order.price.multiply(ripple.Amount.from_json("1000000"));
 
-            $scope.prices[name][action] = order.price.to_human({precision:2});
+            $scope.prices[curr][name][action] = order.price.to_human({precision:2});
 
             $scope.loaded = true;
           })
         })
       })
     })
+  };
+
+  remote.on('connected',function(){
+    console.log('connected');
+
+    getPrices('dollar',pairsDollars);
+    getPrices('yuan',pairsYuan);
   });
   remote.connect();
 });
