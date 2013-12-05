@@ -20,6 +20,7 @@ angular.module( 'xrpvalue.home', [
   // TODO FIX EVERYTHING!!!
 
   $scope.prices = {};
+  $scope.priceHistory = {};
 
   var server = {
     "trusted" : true,
@@ -84,10 +85,15 @@ angular.module( 'xrpvalue.home', [
 
   var getPrices = function(curr,pairs) {
     $scope.prices[curr] = {};
+    $scope.priceHistory[curr] = {};
     _.each(pairs, function(pair,name){
       $scope.prices[curr][name] = {};
+      $scope.priceHistory[curr][name] = {};
 
       ['asks','bids'].forEach(function(action){
+        if (!$scope.priceHistory[curr][name][action])
+          $scope.priceHistory[curr][name][action] = [];
+
         var book = action == 'asks'
             ? getBook(pair.first,pair.second)
             : getBook(pair.second,pair.first);
@@ -113,7 +119,31 @@ angular.module( 'xrpvalue.home', [
             if (order[action === "asks" ? "TakerGets" : "TakerPays"].is_native())
               order.price = order.price.multiply(ripple.Amount.from_json("1000000"));
 
-            $scope.prices[curr][name][action] = order.price.to_human({precision:2});
+            var price = order.price.to_human({precision:2});
+            var history = $scope.priceHistory[curr][name][action];
+            var direction;
+
+            // Store price change history
+            if (history.length) {
+              var lastPrice = history[history.length - 1];
+
+              if (lastPrice != price) {
+                direction = lastPrice < price ? 'up' : 'down';
+
+                $scope.priceHistory[curr][name][action].push(price);
+              }
+            } else {
+              $scope.priceHistory[curr][name][action].push(price);
+            }
+
+            if (!direction && $scope.prices[curr][name][action]) {
+              direction = $scope.prices[curr][name][action].direction;
+            }
+
+            $scope.prices[curr][name][action] = {
+              'price': price,
+              'direction': direction
+            };
 
             $scope.loaded = true;
           })
