@@ -1,16 +1,19 @@
 h1 XRP Value
-.row
+.row(ng-repeat="(name,book) in prices")
+  .name.col-xs-12 {{name}}
   .col-xs-6
-    .jumbotron
-      div(ng-show="asks")
-        span#asks {{asks}} XRP
+    .value
+      div(ng-show="book.asks")
+        span#asks {{book.asks}} XRP
         |  can get you 1$
-      div(ng-hide="asks")
+      div(ng-hide="book.asks")
         | Loading...
   .col-xs-6
-    .jumbotron
-      div(ng-show="bids")
+    .value
+      div(ng-show="book.bids")
         | 1$ can get you
-        span#bids  {{bids}} XRP
-      div(ng-hide="bids")
+        span#bids  {{book.bids}} XRP
+      div(ng-hide="book.bids")
         | Loading...
+.row(ng-hide="loaded")
+  .value Loading...

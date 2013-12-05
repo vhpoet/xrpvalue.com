@@ -1,3 +1,4 @@
+require('underscore');
 require('./home/home');
 
 var moment = require('moment');
