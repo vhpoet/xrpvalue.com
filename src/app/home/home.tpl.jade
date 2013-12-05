@@ -1,77 +1,40 @@
 h1 XRP Value
 .row.row-padding-small(ng-show="loaded")
-  .col-xs-12.col-lg-6
-    h2 American Dollars
-    .row(ng-repeat="(name,book) in prices.dollar")
+  .col-xs-12.col-lg-6(ng-repeat="currencyName in ['dollar','yuan']")
+    h2(ng-show="currencyName == 'dollar'") American Dollars
+    h2(ng-show="currencyName == 'yuan'") Chinese Yuan
+    .row(ng-repeat="(name,book) in prices[currencyName]")
       .name.col-xs-12 {{name}}
       .col-xs-12.col-sm-6
         .value(ng-class="book.asks.direction")
           div(ng-show="book.asks.price")
             .way
-              i.fa.fa-caret-up(ng-show="book.asks.direction == 'up'")
-              i.fa.fa-caret-down(ng-show="book.asks.direction == 'down'")
-              span.dynamic {{book.asks.price}} XRP
-              |  can get you
-              span.static  1 USD
-            .contra
               i.fa.fa-caret-up(ng-show="book.asks.direction == 'down'")
               i.fa.fa-caret-down(ng-show="book.asks.direction == 'up'")
+              span.dynamic {{book.asks.price}} XRP
+              |  can get you
+              span.static  1 {{currencyName == 'dollar' ? 'USD' : 'CNY'}}
+            .contra
               span.static 1 XRP
               |  can get you
-              span.dynamic  {{1/book.asks.price | number:4}} USD
+              i.fa.fa-caret-up(ng-show="book.asks.direction == 'up'")
+              i.fa.fa-caret-down(ng-show="book.asks.direction == 'down'")
+              span.dynamic  {{1/book.asks.price | number:4}} {{currencyName == 'dollar' ? 'USD' : 'CNY'}}
           div(ng-hide="book.asks.price")
             | Loading...
       .col-xs-12.col-sm-6
         .value(ng-class="book.bids.direction")
           div(ng-show="book.bids.price")
             .way
+              span.static 1 {{currencyName == 'dollar' ? 'USD' : 'CNY'}}
+              |  can get you&nbsp;
               i.fa.fa-caret-up(ng-show="book.bids.direction == 'up'")
               i.fa.fa-caret-down(ng-show="book.bids.direction == 'down'")
-              span.static 1 USD
-              |  can get you
               span.dynamic  {{book.bids.price}} XRP
             .contra
               i.fa.fa-caret-up(ng-show="book.bids.direction == 'down'")
               i.fa.fa-caret-down(ng-show="book.bids.direction == 'up'")
-              span.dynamic {{1/book.bids.price | number:4}} USD
-              |  can get you
-              span.static  1 XRP.
-          div(ng-hide="book.bids.price")
-            | Loading...
-  .col-xs-12.col-lg-6
-    h2 Chinese Yuan
-    .row(ng-repeat="(name,book) in prices.yuan")
-      .name.col-xs-12 {{name}}
-      .col-xs-12.col-sm-6
-        .value(ng-class="book.asks.direction")
-          div(ng-show="book.asks.price")
-            .way
-              i.fa.fa-caret-up(ng-show="book.asks.direction == 'up'")
-              i.fa.fa-caret-down(ng-show="book.asks.direction == 'down'")
-              span.dynamic {{book.asks.price}} XRP
-              |  can get you
-              span.static  1 CNY
-            .contra
-              i.fa.fa-caret-up(ng-show="book.asks.direction == 'down'")
-              i.fa.fa-caret-down(ng-show="book.asks.direction == 'up'")
-              span.static 1 XRP
-              |  can get you
-              span.dynamic  {{1/book.asks.price | number:4}} USD
-          div(ng-hide="book.asks.price")
-            | Loading...
-      .col-xs-12.col-sm-6
-        .value(ng-class="book.bids.direction")
-          div(ng-show="book.bids.price")
-            .way
-              i.fa.fa-caret-up(ng-show="book.bids.direction == 'up'")
-              i.fa.fa-caret-down(ng-show="book.bids.direction == 'down'")
-              span.static 1 CNY
-              |  can get you
-              span.dynamic  {{book.bids.price}} XRP
-            .contra
-              i.fa.fa-caret-up(ng-show="book.bids.direction == 'down'")
-              i.fa.fa-caret-down(ng-show="book.bids.direction == 'up'")
-              span.dynamic {{1/book.bids.price | number:4}} USD
+              span.dynamic {{1/book.bids.price | number:4}} {{currencyName == 'dollar' ? 'USD' : 'CNY'}}
               |  can get you
               span.static  1 XRP.
           div(ng-hide="book.bids.price")
