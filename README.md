@@ -1,4 +1,1 @@
-xrpvalue.com
-============
-
-xrpvalue.com website
+xrpvalue website

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="xrpvalue" ng-controller="AppCtrl">
+  <head>
+    <title>xrpvalue</title>
+
+    <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
+    <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
+    <link rel="stylesheet" type="text/css" href="assets/fonts/stylesheet.css">
+
+    <script type="text/javascript" src="http://codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="ripple.js"></script>
+    <script type="text/javascript" src="vendor/angular/angular.js"></script>
+    <script type="text/javascript" src="vendor/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+    <script type="text/javascript" src="vendor/angular-ui-utils/modules/route/route.js"></script>
+    <script type="text/javascript" src="src/common/titleService/titleService.js"></script>
+    <script type="text/javascript" src="templates-common.js"></script>
+    <script type="text/javascript" src="templates-app.js"></script>
+    <script type="text/javascript" src="templates-jade-app.js"></script>
+    <script type="text/javascript" src="templates-jade-common.js"></script>
+    <script type="text/javascript" src="src/xrpvalue.js"></script>
+  </head>
+  <body>
+    <div class="container" ui-view="main"></div>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-46198230-1', 'xrpvalue.com');
+      ga('send', 'pageview');
+
+    </script>
+  </body>
+</html>
