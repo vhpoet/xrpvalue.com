@@ -182,16 +182,20 @@ angular.module( 'xrpvalue.home', [
   remote.connect();
 
   $scope.$watch('orderbooks.USD.gateways.Bitstamp.books.asks.price',function(price){
-    var books = $scope.orderbooks.USD.gateways.Bitstamp.books;
+    if (price) {
+      var books = $scope.orderbooks.USD.gateways.Bitstamp.books;
 
-    if (books.bids.price && books.asks.price)
-      titleService.setTitle(books.bids.price + '/' + books.asks.price);
+      if (books.bids.price && books.asks.price)
+        titleService.setTitle(books.bids.price + '/' + books.asks.price);
+    }
   });
 
   $scope.$watch('orderbooks.USD.gateways.Bitstamp.books.bids.price',function(price){
-    var books = $scope.orderbooks.USD.gateways.Bitstamp.books;
+    if (price) {
+      var books = $scope.orderbooks.USD.gateways.Bitstamp.books;
 
-    if (books.bids.price && books.asks.price)
-      titleService.setTitle(books.bids.price + '/' + books.asks.price);
+      if (books.bids.price && books.asks.price)
+        titleService.setTitle(books.bids.price + '/' + books.asks.price);
+    }
   });
 });
