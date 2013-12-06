@@ -79,3 +79,4 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
               .col-xs-4.rpamount.price(rp-bind-color-amount="order.showPrice")
               .col-xs-4.rpamount.size(rp-bind-color-amount="order.showTakerGets")
               .col-xs-4.rpamount.sum(rp-bind-color-amount="order.showSum")
+.pageLoading(ng-hide="orderbooksArray") Loading ...
