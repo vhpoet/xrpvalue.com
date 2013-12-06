@@ -154,6 +154,14 @@ module.exports = function ( grunt )
           cwd: '.',
           expand: true
         }]
+      },
+      config: {
+        files: [{
+          src: 'config.js',
+          dest: '<%= build_dir %>',
+          cwd: '.',
+          expand: true
+        }]
       }
     },
 
@@ -615,7 +623,7 @@ module.exports = function ( grunt )
   grunt.registerTask( 'build', [
     'clean', 'jshint', 'coffeelint', 'coffee', 'jade', 'html2js', 'recess:build',
     'copy:build_assets', 'copy:build_appjs', 'copy:build_vendorjs', 'copy:lib',
-    'index:build', 'webpack'
+    'copy:config', 'index:build', 'webpack'
   ]);
 
   /**
