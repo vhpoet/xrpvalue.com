@@ -21,7 +21,7 @@ angular.module( 'xrpvalue', [
 
 .run(['titleService', function (titleService)
 {
-  
+  titleService.setSuffix( ' | Live XRP Value' );
 }])
 
 .controller( 'AppCtrl', function AppCtrl ( $scope ) {
