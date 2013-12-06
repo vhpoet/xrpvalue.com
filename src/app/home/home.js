@@ -121,11 +121,11 @@ angular.module( 'xrpvalue.home', [
 
             var price = order.price.to_human({precision:2});
             var history = $scope.priceHistory[curr][name][action];
-            var direction;
+            var direction, lastPrice;
 
             // Store price change history
             if (history.length) {
-              var lastPrice = history[history.length - 1];
+              lastPrice = history[history.length - 1];
 
               if (lastPrice != price) {
                 direction = lastPrice < price ? 'up' : 'down';
@@ -142,7 +142,8 @@ angular.module( 'xrpvalue.home', [
 
             $scope.prices[curr][name][action] = {
               'price': price,
-              'direction': direction
+              'direction': direction,
+              'change': lastPrice ? lastPrice == price : true
             };
 
             $scope.loaded = true;

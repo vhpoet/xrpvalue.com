@@ -4,7 +4,8 @@ h1 XRP Value
     h2(ng-show="currencyName == 'dollar'") US Dollars
     h2(ng-show="currencyName == 'yuan'") Chinese Yuan
     .row(ng-repeat="(name,book) in prices[currencyName]")
-      .name.col-xs-12 {{name}}
+      .col-xs-12
+        .name {{name}}
       .col-xs-12.col-sm-6
         .value(ng-class="book.asks.direction")
           div(ng-show="book.asks.price")

@@ -1,25 +1,32 @@
-body {
+html, body {
   text-align: center;
+  color: #555;
+  font: 16px OpenSansLight, sans-serif;
+
+  .transition-duration(1s);
 }
-.container {
-  font: 16px sans-serif;
+h1,h2,h3 {
+  font-family: OpenSansLight, sans-serif;
 }
 .static, .dynamic {
   font-weight: bold;
+  font-family: sans-serif;
 }
 .name {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
   text-transform: capitalize;
+  border-bottom: 1px dashed #ccc;
+  font-size: 20px;
 }
 .value {
   padding: 10px;
   margin-bottom: 20px;
-  font-weight: 200;
   line-height: 35px;
   color: inherit;
-  background-color: #eeeeee;
-  border-radius: 6px;
+  background-color: #F3F3F3;
+  border-radius: 4px;
   text-align: left;
 
   i {
