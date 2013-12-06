@@ -12,13 +12,20 @@ h1,h2,h3 {
   font-weight: bold;
   font-family: sans-serif;
 }
-.name {
+.head {
   margin-top: 15px;
   margin-bottom: 15px;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px dotted #ccc;
+
+  .buttons {
+    text-align: right;
+  }
+}
+.name {
   text-transform: capitalize;
-  border-bottom: 1px dashed #ccc;
   font-size: 20px;
+  text-align: left;
 }
 .value {
   padding: 10px;
@@ -65,5 +72,22 @@ footer {
   [class*='col-'] {
     padding-left:  (@grid-gutter-width / 6);
     padding-right: (@grid-gutter-width / 6);
+  }
+}
+.insig {
+  color: #ccc;
+}
+.orderbook {
+  margin: 0 0 20px;
+  font-family: sans-serif;
+  text-align: right;
+
+  .headings {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  @media (min-width: @screen-md-max) {
+    font-size: 13px;
   }
 }

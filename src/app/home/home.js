@@ -14,150 +14,172 @@ angular.module( 'xrpvalue.home', [
   });
 })
 
-.controller( 'HomeCtrl', function HomeController( $scope, $rootScope, titleService ) {
+.controller( 'HomeCtrl', function HomeController( $scope, $rootScope, titleService, $filter ) {
   titleService.setTitle('Home');
 
-  // TODO FIX EVERYTHING!!!
+  var rpamountFilter = $filter('rpamount');
+  var remote = new ripple.Remote(Options.server);
 
-  $scope.prices = {};
-  $scope.priceHistory = {};
+  $scope.orderbooks = {};
 
-  var server = {
-    "trusted" : true,
-    "websocket_ip" : "s_west.ripple.com",
-    "websocket_port" : 443,
-    "websocket_ssl" : true
+  /**
+   * Taken from ripple client books.js
+   *
+   * @param data
+   * @param action
+   * @param combine
+   * @returns {*}
+   */
+  function filterRedundantPrices(data, action, combine) {
+    var max_rows = Options.orderbook_max_rows || 100;
+
+    var price;
+    var lastprice;
+    var current;
+    var rpamount = $filter('rpamount');
+    var numerator;
+    var demoninator;
+    var newData = jQuery.extend(true, {}, data);
+
+    var rowCount = 0;
+    newData = _.values(_.compact(_.map(newData, function(d, i) {
+
+      // This check is redundant, but saves the CPU some work
+      if (rowCount > max_rows) return false;
+
+      // prefer taker_pays_funded & taker_gets_funded
+      if (d.hasOwnProperty('taker_gets_funded'))
+      {
+        d.TakerGets = ripple.Amount.from_json(d.taker_gets_funded);
+        d.TakerPays = ripple.Amount.from_json(d.taker_pays_funded);
+      }
+
+      d.TakerGets = ripple.Amount.from_json(d.TakerGets);
+      d.TakerPays = ripple.Amount.from_json(d.TakerPays);
+
+      d.price = ripple.Amount.from_quality(d.BookDirectory, "1", "1");
+
+      if (action !== "asks") d.price = ripple.Amount.from_json("1/1/1").divide(d.price);
+
+      // Adjust for drops: The result would be a million times too large.
+      if (d[action === "asks" ? "TakerPays" : "TakerGets"].is_native())
+        d.price  = d.price.divide(ripple.Amount.from_json("1000000"));
+
+      // Adjust for drops: The result would be a million times too small.
+      if (d[action === "asks" ? "TakerGets" : "TakerPays"].is_native())
+        d.price  = d.price.multiply(ripple.Amount.from_json("1000000"));
+
+      var price = rpamount(d.price, {
+        rel_precision: 4,
+        rel_min_precision: 2
+      });
+
+      if (lastprice === price) {
+        if (combine) {
+          newData[current].TakerPays = ripple.Amount.from_json(newData[current].TakerPays).add(d.TakerPays);
+          newData[current].TakerGets = ripple.Amount.from_json(newData[current].TakerGets).add(d.TakerGets);
+        }
+        d = false;
+      } else current = i;
+      lastprice = price;
+
+      if (d) rowCount++;
+
+      if (rowCount > max_rows) return false;
+
+      return d;
+    })));
+
+    var key = action === "asks" ? "TakerGets" : "TakerPays";
+    var sum;
+    _.each(newData, function (order, i) {
+      if (sum) sum = order.sum = sum.add(order[key]);
+      else sum = order.sum = order[key];
+    });
+
+    return newData;
+  }
+
+  var handleBook = function(orders,action) {
+    orders = filterRedundantPrices(orders,action,true);
+
+    // TODO fix
+    orders = orders.splice(0,20);
+
+    orders.forEach(function(order,index){
+      order.showSum = rpamountFilter(order.sum,Options.orderbookFilterOpts);
+      order.showPrice = rpamountFilter(order.price,Options.orderbookFilterOpts);
+
+      var showValue = action === 'bids' ? 'TakerPays' : 'TakerGets';
+      order['show' + showValue] = rpamountFilter(order[showValue],Options.orderbookFilterOpts);
+    });
+
+    return orders;
   };
 
-  var remote = new ripple.Remote(server);
-  var book;
+  // Start getting market data
+  var getData = function () {
+    // Currencies
+    Options.markets.forEach(function(market){
+      var currency = market.currency;
 
-  var pairsDollars = {
-    bitstamp: {
-      first: {
-        currency: 'USD',
-        issuer: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'
-      },
-      second: {
-        currency: 'XRP',
-        issuer: null
+      if (!$scope.orderbooks[currency]) {
+        $scope.orderbooks[currency] = {
+          name: market.name,
+          priority: market.priority,
+          currency: market.currency,
+          gateways: {}
+        };
       }
-    },
-    snapswap: {
-      first: {
-        currency: 'USD',
-        issuer: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
-      },
-      second: {
-        currency: 'XRP',
-        issuer: null
-      }
-    }
-  };
 
-  var pairsYuan = {
-    RippleCN: {
-      first: {
-        currency: 'CNY',
-        issuer: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK'
-      },
-      second: {
-        currency: 'XRP',
-        issuer: null
-      }
-    },
-    RippleChina: {
-      first: {
-        currency: 'CNY',
-        issuer: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'
-      },
-      second: {
-        currency: 'XRP',
-        issuer: null
-      }
-    }
-  };
+      // Gateways
+      _.each(market.gateways, function(issuer,gateway){
+        if (!$scope.orderbooks[currency].gateways[gateway]) {
+          $scope.orderbooks[currency].gateways[gateway] = {
+            books: {
+              asks: {orders:[]},
+              bids: {orders:[]}
+            }
+          };
+        }
 
-  var getBook = function (first,second) {
-    return remote.book(first.currency, first.issuer,
-        second.currency, second.issuer);
-  };
+        ['asks','bids'].forEach(function(action){
+          var book = action == 'asks'
+              ? remote.book(currency, issuer, 'XRP', null)
+              : remote.book('XRP', null, currency, issuer);
 
-  var getPrices = function(curr,pairs) {
-    $scope.prices[curr] = {};
-    $scope.priceHistory[curr] = {};
-    _.each(pairs, function(pair,name){
-      $scope.prices[curr][name] = {};
-      $scope.priceHistory[curr][name] = {};
+          book.on('model',function(orders){
+            $scope.$apply(function(){
+              var bookData = $scope.orderbooks[currency].gateways[gateway].books[action];
+              bookData.orders = handleBook(orders,action);
 
-      ['asks','bids'].forEach(function(action){
-        if (!$scope.priceHistory[curr][name][action])
-          $scope.priceHistory[curr][name][action] = [];
+              if (bookData.price) bookData.lastPrice = bookData.price;
 
-        var book = action == 'asks'
-            ? getBook(pair.first,pair.second)
-            : getBook(pair.second,pair.first);
+              bookData.price = bookData.orders[0].price.to_human({precision:2});
 
-        book.on('model',function(book){
-          $scope.$apply(function(){
-            console.log(action + ' update');
+              var lastDirection = bookData.direction;
 
-            var order = book[0];
-
-            order.TakerGets = ripple.Amount.from_json(order.TakerGets);
-            order.TakerPays = ripple.Amount.from_json(order.TakerPays);
-
-            order.price = ripple.Amount.from_quality(order.BookDirectory, "1", "1");
-
-            if (action !== "asks") order.price = ripple.Amount.from_json("1/1/1").divide(order.price);
-
-            // Adjust for drops: The result would be a million times too large.
-            if (order[action === "asks" ? "TakerPays" : "TakerGets"].is_native())
-              order.price = order.price.divide(ripple.Amount.from_json("1000000"));
-
-            // Adjust for drops: The result would be a million times too small.
-            if (order[action === "asks" ? "TakerGets" : "TakerPays"].is_native())
-              order.price = order.price.multiply(ripple.Amount.from_json("1000000"));
-
-            var price = order.price.to_human({precision:2});
-            var history = $scope.priceHistory[curr][name][action];
-            var direction, lastPrice;
-
-            // Store price change history
-            if (history.length) {
-              lastPrice = history[history.length - 1];
-
-              if (lastPrice != price) {
-                direction = lastPrice < price ? 'up' : 'down';
-
-                $scope.priceHistory[curr][name][action].push(price);
+              if (bookData.lastPrice && bookData.lastPrice != bookData.price) {
+                bookData.direction = bookData.lastPrice < bookData.price ? 'up' : 'down';
               }
-            } else {
-              $scope.priceHistory[curr][name][action].push(price);
-            }
 
-            if (!direction && $scope.prices[curr][name][action]) {
-              direction = $scope.prices[curr][name][action].direction;
-            }
+              if (!bookData.direction) {
+                bookData.direction = lastDirection;
+              }
 
-            $scope.prices[curr][name][action] = {
-              'price': price,
-              'direction': direction,
-              'change': lastPrice ? lastPrice == price : true
-            };
-
-            $scope.loaded = true;
+              // ahh
+              $scope.orderbooksArray = _.toArray($scope.orderbooks);
+            })
           })
         })
       })
-    })
+    });
   };
 
   remote.on('connected',function(){
     console.log('connected');
 
-    getPrices('dollar',pairsDollars);
-    getPrices('yuan',pairsYuan);
+    getData();
   });
   remote.connect();
 });

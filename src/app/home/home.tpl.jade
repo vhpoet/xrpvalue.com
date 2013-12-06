@@ -1,44 +1,81 @@
-h1 XRP Value
-.row.row-padding-small(ng-show="loaded")
-  .col-xs-12.col-lg-6(ng-repeat="currencyName in ['dollar','yuan']")
-    h2(ng-show="currencyName == 'dollar'") US Dollars
-    h2(ng-show="currencyName == 'yuan'") Chinese Yuan
-    .row(ng-repeat="(name,book) in prices[currencyName]")
-      .col-xs-12
-        .name {{name}}
-      .col-xs-12.col-sm-6
-        .value(ng-class="book.asks.direction")
-          div(ng-show="book.asks.price")
-            .way
-              i.fa.fa-caret-up(ng-show="book.asks.direction == 'down'")
-              i.fa.fa-caret-down(ng-show="book.asks.direction == 'up'")
-              span.dynamic {{book.asks.price}} XRP
-              |  can get you
-              span.static  1 {{currencyName == 'dollar' ? 'USD' : 'CNY'}}
-            .contra
-              span.static 1 XRP
-              |  can get you
-              i.fa.fa-caret-up(ng-show="book.asks.direction == 'up'")
-              i.fa.fa-caret-down(ng-show="book.asks.direction == 'down'")
-              span.dynamic  {{1/book.asks.price | number:4}} {{currencyName == 'dollar' ? 'USD' : 'CNY'}}
-          div(ng-hide="book.asks.price")
-            | Loading...
-      .col-xs-12.col-sm-6
-        .value(ng-class="book.bids.direction")
-          div(ng-show="book.bids.price")
-            .way
-              span.static 1 {{currencyName == 'dollar' ? 'USD' : 'CNY'}}
-              |  can get you&nbsp;
-              i.fa.fa-caret-up(ng-show="book.bids.direction == 'up'")
-              i.fa.fa-caret-down(ng-show="book.bids.direction == 'down'")
-              span.dynamic  {{book.bids.price}} XRP
-            .contra
-              i.fa.fa-caret-up(ng-show="book.bids.direction == 'down'")
-              i.fa.fa-caret-down(ng-show="book.bids.direction == 'up'")
-              span.dynamic {{1/book.bids.price | number:4}} {{currencyName == 'dollar' ? 'USD' : 'CNY'}}
-              |  can get you
-              span.static  1 XRP.
-          div(ng-hide="book.bids.price")
-            | Loading...
-.row(ng-hide="loaded")
-  .value Loading...
+h2 XRP Value
+div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
+  h3 -- {{market.name}} --
+  .row
+    .col-xs-12.col-lg-6.row-padding-small(ng-repeat="(name,gateway) in market.gateways")
+      .head
+        .row
+          .col-xs-12.col-sm-6.name {{name}}
+          .col-xs-12.col-sm-6.buttons
+            .btn-group
+              button.btn.btn-default.btn-sm(
+                ng-class="{active : gateway.mode != 'orderbook'}"
+                ng-click="gateway.mode = 'price'"
+              ) Price
+              button.btn.btn-default.btn-sm(
+                ng-class="{active : gateway.mode == 'orderbook'}"
+                ng-click="gateway.mode = 'orderbook'"
+              ) Orderbook
+      div(ng-show="gateway.mode != 'orderbook'")
+        .col-xs-12.col-sm-6
+          .value(ng-class="gateway.books.bids.direction")
+            div(ng-show="gateway.books.bids.price")
+              .way
+                span.static 1 {{market.currency}}
+                |  can get you&nbsp;
+                i.fa.fa-caret-up(ng-show="gateway.books.bids.direction == 'up'")
+                i.fa.fa-caret-down(ng-show="gateway.books.bids.direction == 'down'")
+                span.dynamic  {{gateway.books.bids.price}} XRP
+              .contra
+                i.fa.fa-caret-up(ng-show="gateway.books.bids.direction == 'down'")
+                i.fa.fa-caret-down(ng-show="gateway.books.bids.direction == 'up'")
+                span.dynamic {{1/gateway.books.bids.price | number:4}} {{market.currency}}
+                |  can get you
+                span.static  1 XRP.
+            div(ng-hide="gateway.books.bids.price")
+              | Loading...
+        .col-xs-12.col-sm-6
+          .value(ng-class="gateway.books.asks.direction")
+            div(ng-show="gateway.books.asks.price")
+              .way
+                i.fa.fa-caret-up(ng-show="gateway.books.asks.direction == 'down'")
+                i.fa.fa-caret-down(ng-show="gateway.books.asks.direction == 'up'")
+                span.dynamic {{gateway.books.asks.price}} XRP
+                |  can get you
+                span.static  1 {{market.currency}}
+              .contra
+                span.static 1 XRP
+                |  can get you
+                i.fa.fa-caret-up(ng-show="gateway.books.asks.direction == 'up'")
+                i.fa.fa-caret-down(ng-show="gateway.books.asks.direction == 'down'")
+                span.dynamic  {{1/gateway.books.asks.price | number:4}} {{market.currency}}
+            div(ng-hide="gateway.books.asks.price")
+              | Loading...
+      .col-xs-12.orderbook(ng-show="gateway.mode == 'orderbook'")
+        .row
+          .bids.col-xs-12.col-sm-6
+            .title Bids
+            .row.headings(ng-show="gateway.books.bids.orders.length")
+              .col-xs-4.sum Sum
+                .currency {{book.bids[0].TakerPays | rpcurrency}}
+              .col-xs-4.size Size
+                .currency {{book.bids[0].TakerPays | rpcurrency}}
+              .col-xs-4.price Bid Price
+                .currency {{book.bids[0].TakerGets | rpcurrency}}
+            .row(ng-repeat='order in gateway.books.bids.orders track by $index')
+              .col-xs-4.rpamount.sum(rp-bind-color-amount="order.showSum")
+              .col-xs-4.rpamount.size(rp-bind-color-amount="order.showTakerPays")
+              .col-xs-4.rpamount.price(rp-bind-color-amount="order.showPrice")
+          .asks.col-xs-12.col-sm-6
+            .title Asks
+            .row.headings(ng-show="gateway.books.asks.orders.length")
+              .col-xs-4.price Ask Price
+                .currency {{book.asks[0].TakerPays | rpcurrency}}
+              .col-xs-4.size Size
+                .currency {{book.asks[0].TakerGets | rpcurrency}}
+              .col-xs-4.sum Sum
+                .currency {{book.asks[0].TakerGets | rpcurrency}}
+            .row(ng-repeat='order in gateway.books.asks.orders track by $index')
+              .col-xs-4.rpamount.price(rp-bind-color-amount="order.showPrice")
+              .col-xs-4.rpamount.size(rp-bind-color-amount="order.showTakerGets")
+              .col-xs-4.rpamount.sum(rp-bind-color-amount="order.showSum")

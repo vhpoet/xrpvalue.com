@@ -14,5 +14,30 @@ var Options = {
     ],
 
     connection_offset: 1
+  },
+  markets: [
+    {
+      name: 'US Dollars',
+      currency: 'USD',
+      priority: 1,
+      gateways: {
+        Bitstamp: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B',
+        SnapSwap: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
+      }
+    },
+    {
+      name: 'Chinese Yuan',
+      currency: 'CNY',
+      priority: 2,
+      gateways: {
+        RippleCN: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK',
+        RippleChina: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'
+      }
+    }
+  ],
+  orderbookFilterOpts: {
+    'precision': 5,
+    'min_precision': 5,
+    'max_sig_digits': 20
   }
 };
