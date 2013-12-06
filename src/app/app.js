@@ -21,7 +21,7 @@ angular.module( 'xrpvalue', [
 
 .run(['titleService', function (titleService)
 {
-  titleService.setSuffix( ' | xrpvalue' );
+  
 }])
 
 .controller( 'AppCtrl', function AppCtrl ( $scope ) {

@@ -15,7 +15,7 @@ angular.module( 'xrpvalue.home', [
 })
 
 .controller( 'HomeCtrl', function HomeController( $scope, $rootScope, titleService, $filter ) {
-  titleService.setTitle('Home');
+  titleService.setTitle('Live XRP Value');
 
   var rpamountFilter = $filter('rpamount');
   var remote = new ripple.Remote(Options.server);
