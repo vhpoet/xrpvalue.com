@@ -1,7 +1,7 @@
 h1 XRP Value
 .row.row-padding-small(ng-show="loaded")
   .col-xs-12.col-lg-6(ng-repeat="currencyName in ['dollar','yuan']")
-    h2(ng-show="currencyName == 'dollar'") American Dollars
+    h2(ng-show="currencyName == 'dollar'") US Dollars
     h2(ng-show="currencyName == 'yuan'") Chinese Yuan
     .row(ng-repeat="(name,book) in prices[currencyName]")
       .name.col-xs-12 {{name}}
