@@ -46,10 +46,9 @@ angular.module( 'xrpvalue.home', [
       if (rowCount > max_rows) return false;
 
       // prefer taker_pays_funded & taker_gets_funded
-      if (d.hasOwnProperty('taker_gets_funded'))
-      {
-        d.TakerGets = ripple.Amount.from_json(d.taker_gets_funded);
-        d.TakerPays = ripple.Amount.from_json(d.taker_pays_funded);
+      if (d.hasOwnProperty('taker_gets_funded')) {
+        d.TakerGets = d.taker_gets_funded;
+        d.TakerPays = d.taker_pays_funded;
       }
 
       d.TakerGets = ripple.Amount.from_json(d.TakerGets);
@@ -153,7 +152,8 @@ angular.module( 'xrpvalue.home', [
 
               if (bookData.price) bookData.lastPrice = bookData.price;
 
-              bookData.price = bookData.orders[0].price.to_human({precision:2});
+              bookData.price = bookData.orders[0].price;
+              bookData.flipPrice = ripple.Amount.from_human(1).divide(bookData.orders[0].price);
 
               var lastDirection = bookData.direction;
 
@@ -186,7 +186,8 @@ angular.module( 'xrpvalue.home', [
       var books = $scope.orderbooks.USD.gateways.Bitstamp.books;
 
       if (books.bids.price && books.asks.price)
-        titleService.setTitle(books.bids.price + '/' + books.asks.price);
+        titleService.setTitle(books.bids.price.to_human(Options.pageTitlePriceOpts)
+          + '/' + books.asks.price.to_human(Options.pageTitlePriceOpts));
     }
   });
 
@@ -195,7 +196,8 @@ angular.module( 'xrpvalue.home', [
       var books = $scope.orderbooks.USD.gateways.Bitstamp.books;
 
       if (books.bids.price && books.asks.price)
-        titleService.setTitle(books.bids.price + '/' + books.asks.price);
+        titleService.setTitle(books.bids.price.to_human(Options.pageTitlePriceOpts)
+          + '/' + books.asks.price.to_human(Options.pageTitlePriceOpts));
     }
   });
 });

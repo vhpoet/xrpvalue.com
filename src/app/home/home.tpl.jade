@@ -25,11 +25,11 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
                 |  can get you&nbsp;
                 i.fa.fa-caret-up(ng-show="gateway.books.bids.direction == 'up'")
                 i.fa.fa-caret-down(ng-show="gateway.books.bids.direction == 'down'")
-                span.dynamic  {{gateway.books.bids.price}} XRP
+                span.dynamic  {{gateway.books.bids.price | rpamount}} XRP
               .contra
                 i.fa.fa-caret-up(ng-show="gateway.books.bids.direction == 'down'")
                 i.fa.fa-caret-down(ng-show="gateway.books.bids.direction == 'up'")
-                span.dynamic {{1/gateway.books.bids.price | number:4}} {{market.currency}}
+                span.dynamic {{gateway.books.bids.flipPrice | rpamount}} {{market.currency}}
                 |  can get you
                 span.static  1 XRP.
             div(ng-hide="gateway.books.bids.price")
@@ -40,7 +40,7 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
               .way
                 i.fa.fa-caret-up(ng-show="gateway.books.asks.direction == 'down'")
                 i.fa.fa-caret-down(ng-show="gateway.books.asks.direction == 'up'")
-                span.dynamic {{gateway.books.asks.price}} XRP
+                span.dynamic {{gateway.books.asks.price | rpamount}} XRP
                 |  can get you
                 span.static  1 {{market.currency}}
               .contra
@@ -48,7 +48,7 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
                 |  can get you
                 i.fa.fa-caret-up(ng-show="gateway.books.asks.direction == 'up'")
                 i.fa.fa-caret-down(ng-show="gateway.books.asks.direction == 'down'")
-                span.dynamic  {{1/gateway.books.asks.price | number:4}} {{market.currency}}
+                span.dynamic  {{gateway.books.asks.flipPrice | rpamount}} {{market.currency}}
             div(ng-hide="gateway.books.asks.price")
               | Loading...
       .col-xs-12.orderbook(ng-show="gateway.mode == 'orderbook'")

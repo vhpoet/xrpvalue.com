@@ -44,8 +44,13 @@ var Options = {
     }
   ],
   orderbookFilterOpts: {
-    'precision': 5,
-    'min_precision': 5,
-    'max_sig_digits': 20
+    precision: 5,
+    min_precision: 5,
+    max_sig_digits: 20
+  },
+  pageTitlePriceOpts: {
+    precision: 2,
+    min_precision: 2,
+    max_sig_digits: 2
   }
 };
