@@ -33,6 +33,14 @@ var Options = {
         RippleCN: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK',
         RippleChina: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'
       }
+    },
+    {
+      name: 'Bitcoin',
+      currency: 'BTC',
+      priority: 3,
+      gateways: {
+        Bitstamp: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'
+      }
     }
   ],
   orderbookFilterOpts: {
