@@ -157,8 +157,19 @@ angular.module( 'xrpvalue.home', [
 
               var lastDirection = bookData.direction;
 
-              if (bookData.lastPrice && bookData.lastPrice != bookData.price) {
-                bookData.direction = bookData.lastPrice < bookData.price ? 'up' : 'down';
+              if (bookData.lastPrice) {
+                switch (bookData.lastPrice.compareTo(bookData.price))
+                {
+                  case 1:
+                    bookData.direction = 'down';
+                    break;
+                  case -1:
+                    bookData.direction = 'up';
+                    break;
+                  default:
+                    bookData.direction = lastDirection;
+                    break;
+                }
               }
 
               if (!bookData.direction) {
