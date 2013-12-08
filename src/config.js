@@ -50,7 +50,6 @@ var Options = {
   },
   pageTitlePriceOpts: {
     precision: 2,
-    min_precision: 2,
-    max_sig_digits: 2
+    min_precision: 2
   }
 };
