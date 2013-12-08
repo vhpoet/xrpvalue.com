@@ -16,7 +16,7 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
                 ng-class="{active : gateway.mode == 'orderbook'}"
                 ng-click="gateway.mode = 'orderbook'"
               ) Orderbook
-      div(ng-show="gateway.mode != 'orderbook'")
+      .prices(ng-show="gateway.mode != 'orderbook'")
         .col-xs-12.col-sm-6
           .value(ng-class="gateway.books.bids.direction")
             div(ng-show="gateway.books.bids.price")

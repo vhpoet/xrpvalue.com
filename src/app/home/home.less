@@ -80,14 +80,33 @@ footer {
 .insig {
   color: #ccc;
 }
+.prices {
+  @media (min-width: @screen-lg-min) {
+    font-size: 14px;
+  }
+}
 .orderbook {
   margin: 0 0 20px;
   font-family: sans-serif;
   text-align: right;
 
+  & > .row > div:first-child {
+    border-right: 1px dotted #ccc;
+  }
+
+  .title {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+
   .headings {
     margin-top: 5px;
     margin-bottom: 5px;
+
+    & > div {
+      border-bottom: 1px dotted #ccc;
+      padding-bottom: 5px;
+    }
   }
 
   @media (min-width: @screen-md-max) {
