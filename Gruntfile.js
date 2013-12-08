@@ -155,12 +155,30 @@ module.exports = function ( grunt )
           expand: true
         }]
       },
-      config: {
+      rootFiles: {
         files: [{
-          src: 'config.js',
+          src: 'src/config.js',
+          dest: '<%= build_dir %>',
+          cwd: '.',
+          expand: true,
+          flatten: true
+        }, {
+          src: 'ripple.js',
           dest: '<%= build_dir %>',
           cwd: '.',
           expand: true
+        }, {
+          src: 'src/favicon.ico',
+          dest: '<%= build_dir %>',
+          cwd: '.',
+          expand: true,
+          flatten: true
+        }, {
+          src: 'src/apple-touch-icon-precomposed.png',
+          dest: '<%= build_dir %>',
+          cwd: '.',
+          expand: true,
+          flatten: true
         }]
       }
     },
@@ -623,7 +641,7 @@ module.exports = function ( grunt )
   grunt.registerTask( 'build', [
     'clean', 'jshint', 'coffeelint', 'coffee', 'jade', 'html2js', 'recess:build',
     'copy:build_assets', 'copy:build_appjs', 'copy:build_vendorjs', 'copy:lib',
-    'copy:config', 'index:build', 'webpack'
+    'copy:rootFiles', 'index:build', 'webpack'
   ]);
 
   /**
