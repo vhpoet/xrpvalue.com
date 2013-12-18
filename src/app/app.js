@@ -5,7 +5,7 @@ var moment = require('moment');
 
 angular.module( 'xrpvalue', [
   'ngResource',
-  'ui.state',
+  'ui.router.state',
   'ui.route',
   'ui.bootstrap',
   'templates-app',
