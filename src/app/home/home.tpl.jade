@@ -9,14 +9,21 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
           .col-xs-12.col-sm-6.buttons
             .btn-group
               button.btn.btn-default.btn-sm(
-                ng-class="{active : gateway.mode != 'orderbook'}"
+                ng-class="{active : gateway.mode == 'price'}"
                 ng-click="gateway.mode = 'price'"
               ) Price
+              button.btn.btn-default.btn-sm(
+                ng-class="{active : gateway.mode == 'trades'}"
+                ng-click="gateway.mode = 'trades'"
+              )
+                span.label.label-success NEW
+                |  Trades
               button.btn.btn-default.btn-sm(
                 ng-class="{active : gateway.mode == 'orderbook'}"
                 ng-click="gateway.mode = 'orderbook'"
               ) Orderbook
-      .prices(ng-show="gateway.mode != 'orderbook'")
+
+      .prices(ng-show="gateway.mode == 'price'")
         .col-xs-12.col-sm-6
           .value(ng-class="gateway.books.bids.direction")
             div(ng-show="gateway.books.bids.price")
@@ -51,6 +58,20 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
                 span.dynamic  {{gateway.books.asks.flipPrice | rpamount}} {{market.currency}}
             div(ng-hide="gateway.books.asks.price")
               | Loading...
+
+      .col-xs-12.trades(ng-show="gateway.mode == 'trades'")
+        ul.trades
+          li.row
+            .col-xs-4 Time
+            .col-xs-4 Amount (XRP)
+            .col-xs-4 Price ({{market.currency}})
+          li.row.data(ng-repeat="trade in gateway.trades")
+            .col-xs-4 {{trade.time | date:'h:mm:ss'}}
+            .col-xs-4 {{trade.amount | rpamount}}
+            .col-xs-4 {{trade.price | rpamount}}
+          li.data(ng-hide="gateway.trades.length")
+            | No trades so far...
+
       .col-xs-12.orderbook(ng-show="gateway.mode == 'orderbook'")
         .row
           .bids.col-xs-12.col-sm-6

@@ -136,7 +136,9 @@ angular.module( 'xrpvalue.home', [
             books: {
               asks: {orders:[]},
               bids: {orders:[]}
-            }
+            },
+            trades: [],
+            mode: 'price'
           };
         }
 
@@ -144,6 +146,24 @@ angular.module( 'xrpvalue.home', [
           var book = action == 'asks'
               ? remote.book(currency, issuer, 'XRP', null)
               : remote.book('XRP', null, currency, issuer);
+
+          book.on('trade',function(gets,pays){
+            // Ripple-lib bug
+            if (gets.is_valid() && pays.is_valid()) {
+              $scope.$apply(function(){
+                $scope.orderbooks[currency].gateways[gateway].trades.unshift({
+                  time: Date.now(),
+                  price: action == 'asks'
+                    ? pays.ratio_human(gets)
+                    : gets.ratio_human(pays),
+                  amount: action == 'asks' ? gets : pays
+                });
+
+                $scope.orderbooks[currency].gateways[gateway].trades =
+                  $scope.orderbooks[currency].gateways[gateway].trades.slice(0,20);
+              });
+            }
+          });
 
           book.on('model',function(orders){
             $scope.$apply(function(){
