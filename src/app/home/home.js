@@ -1,3 +1,5 @@
+var store = require('store');
+
 angular.module( 'xrpvalue.home', [
   'titleService'
 ])
@@ -132,13 +134,15 @@ angular.module( 'xrpvalue.home', [
       // Gateways
       _.each(market.gateways, function(issuer,gateway){
         if (!$scope.orderbooks[currency].gateways[gateway]) {
+          var storeMode = store.get('xrpvalue_mode_' + gateway+currency);
+
           $scope.orderbooks[currency].gateways[gateway] = {
             books: {
               asks: {orders:[]},
               bids: {orders:[]}
             },
             trades: [],
-            mode: 'price'
+            mode: storeMode ? storeMode : 'price'
           };
         }
 
@@ -203,6 +207,12 @@ angular.module( 'xrpvalue.home', [
         })
       })
     });
+  };
+
+  $scope.changeMode = function (name,currency,gateway,mode) {
+    gateway.mode = mode;
+    console.log(gateway);
+    store.set('xrpvalue_mode_' + name+currency, mode);
   };
 
   remote.on('connected',function(){

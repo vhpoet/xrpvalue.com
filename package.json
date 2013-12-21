@@ -22,6 +22,7 @@
     "grunt-contrib-jade": "~0.7.0",
     "grunt-webpack": "",
     "moment": "",
-    "underscore": ""
+    "underscore": "",
+    "store": "1.3.x"
   }
 }

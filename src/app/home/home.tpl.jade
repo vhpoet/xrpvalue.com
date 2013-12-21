@@ -10,17 +10,17 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
             .btn-group
               button.btn.btn-default.btn-sm(
                 ng-class="{active : gateway.mode == 'price'}"
-                ng-click="gateway.mode = 'price'"
+                ng-click="changeMode(name, market.currency, gateway,'price')"
               ) Price
               button.btn.btn-default.btn-sm(
                 ng-class="{active : gateway.mode == 'trades'}"
-                ng-click="gateway.mode = 'trades'"
+                ng-click="changeMode(name, market.currency, gateway,'trades')"
               )
                 span.label.label-success NEW
                 |  Trades
               button.btn.btn-default.btn-sm(
                 ng-class="{active : gateway.mode == 'orderbook'}"
-                ng-click="gateway.mode = 'orderbook'"
+                ng-click="changeMode(name, market.currency, gateway,'orderbook')"
               ) Orderbook
 
       .prices(ng-show="gateway.mode == 'price'")
