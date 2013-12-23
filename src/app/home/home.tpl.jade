@@ -70,7 +70,7 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
             .col-xs-4 {{trade.amount | rpamount}}
             .col-xs-4 {{trade.price | rpamount}}
           li.data(ng-hide="gateway.trades.length")
-            | No trades so far...
+            | No trades since you opened the page...
 
       .col-xs-12.orderbook(ng-show="gateway.mode == 'orderbook'")
         .row
