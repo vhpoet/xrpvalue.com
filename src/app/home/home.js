@@ -211,7 +211,6 @@ angular.module( 'xrpvalue.home', [
 
   $scope.changeMode = function (name,currency,gateway,mode) {
     gateway.mode = mode;
-    console.log(gateway);
     store.set('xrpvalue_mode_' + name+currency, mode);
   };
 
