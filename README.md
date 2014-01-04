@@ -4,10 +4,10 @@ Pull requests are more then welcome.
 
 ## Installation
 
-1. `git clone https://github.com/vhpoet/xrpvalue.com ./`
-2. `npm install`
-3. `bower install`
-4. `grunt`
+    $ git clone https://github.com/vhpoet/xrpvalue.com ./
+    $ npm install
+    $ bower install
+    $ grunt
 
 Check the build folder :)
 
