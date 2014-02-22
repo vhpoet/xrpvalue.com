@@ -215,8 +215,6 @@ angular.module( 'xrpvalue.home', [
   };
 
   remote.on('connected',function(){
-    console.log('connected');
-
     getData();
   });
   remote.connect();

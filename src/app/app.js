@@ -24,8 +24,15 @@ angular.module( 'xrpvalue', [
   titleService.setSuffix( ' | Live XRP Value' );
 }])
 
-.controller( 'AppCtrl', function AppCtrl ( $scope ) {
-
+.controller( 'AppCtrl', function AppCtrl ( $scope ){
+  var remote = new ripple.Remote(Options.server);
+  remote.on('connected',function(){
+    $scope.connectionStatus = 'online';
+  });
+  remote.on('disconnected', function(){
+    $scope.connectionStatus = 'offline';
+  });
+  remote.connect();
 })
 
 /**

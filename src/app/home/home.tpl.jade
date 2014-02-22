@@ -1,4 +1,5 @@
 h2 Live XRP Value
+  span(ng-show="connectionStatus")  ({{connectionStatus}})
 div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
   h3 -- {{market.name}} --
   .row
@@ -15,9 +16,7 @@ div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
               button.btn.btn-default.btn-sm(
                 ng-class="{active : gateway.mode == 'trades'}"
                 ng-click="changeMode(name, market.currency, gateway,'trades')"
-              )
-                span.label.label-success NEW
-                |  Trades
+              ) Trades
               button.btn.btn-default.btn-sm(
                 ng-class="{active : gateway.mode == 'orderbook'}"
                 ng-click="changeMode(name, market.currency, gateway,'orderbook')"
