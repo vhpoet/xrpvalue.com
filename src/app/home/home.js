@@ -16,9 +16,9 @@ angular.module( 'xrpvalue.home', [
   });
 })
 
-.controller( 'HomeCtrl', function HomeController( $scope, $rootScope, titleService, $filter ) {
+.controller( 'HomeCtrl', function HomeController( $scope, $rootScope, titleService, $filter, remote ) {
   var rpamountFilter = $filter('rpamount');
-  var remote = new ripple.Remote(Options.server);
+
 
   $scope.orderbooks = {};
 
@@ -217,7 +217,9 @@ angular.module( 'xrpvalue.home', [
   remote.on('connected',function(){
     getData();
   });
-  remote.connect();
+  if (remote._connected) {
+    getData();
+  }
 
   $scope.$watch('orderbooks.USD.gateways.Bitstamp.books.asks.price',function(price){
     if (price) {
