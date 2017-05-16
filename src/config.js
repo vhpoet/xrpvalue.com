@@ -37,7 +37,7 @@ var Options = {
       currency: 'CNY',
       priority: 3,
       gateways: {
-        RippleChina: 'rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y'
+        RippleFox: 'rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y'
       }
     },
     {
