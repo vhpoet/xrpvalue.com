@@ -1,12 +1,11 @@
-h2 Live XRP Value
+h2 XRP Value
   span(ng-show="connectionStatus")  ({{connectionStatus}})
-div(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
-  h3 -- {{market.name}} --
-  .row
-    .col-xs-12.col-lg-6.row-padding-small(ng-repeat="(name,gateway) in market.gateways")
+.row
+  .col-xs-12.col-lg-6.row-padding-small(ng-repeat="market in orderbooksArray | orderBy:'priority':false")
+    div(ng-repeat="(name,gateway) in market.gateways")
       .head
         .row
-          .col-xs-12.col-sm-6.name {{name}}
+          .col-xs-12.col-sm-6.name {{name}} ({{market.name}})
           .col-xs-12.col-sm-6.buttons
             .btn-group
               button.btn.btn-default.btn-sm(

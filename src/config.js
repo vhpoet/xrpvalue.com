@@ -21,25 +21,31 @@ var Options = {
       currency: 'USD',
       priority: 1,
       gateways: {
-        Bitstamp: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B',
-        SnapSwap: 'rMwjYedjc7qqtKYVLiAccJSmCwih4LnE2q'
-      }
-    },
-    {
-      name: 'Chinese Yuan',
-      currency: 'CNY',
-      priority: 2,
-      gateways: {
-        RippleCN: 'rnuF96W4SZoCJmbHYBFoJZpR8eCaxNvekK',
-        RippleChina: 'razqQKzJRdB4UxFPWf5NEpEG3WMkmwgcXA'
+        Bitstamp: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'
       }
     },
     {
       name: 'Bitcoin',
       currency: 'BTC',
-      priority: 3,
+      priority: 2,
       gateways: {
         Bitstamp: 'rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B'
+      }
+    },
+    {
+      name: 'Chinese Yuan',
+      currency: 'CNY',
+      priority: 3,
+      gateways: {
+        RippleChina: 'rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y'
+      }
+    },
+    {
+      name: 'Japanese Yen',
+      currency: 'JPY',
+      priority: 4,
+      gateways: {
+        MrRipple: 'rB3gZey7VWHYRqJHLoHDEJXJ2pEPNieKiS'
       }
     }
   ],
