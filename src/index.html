@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html ng-app="xrpvalue" ng-controller="AppCtrl">
   <head>
-    <title>Live XRP Value</title>
+    <title>XRP Value</title>
 
     <meta charset="utf-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Live Ripple XRP price on major exchanges/gateways. Bitstamp, RippleFox, Mr. Ripple">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
     <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
@@ -32,6 +33,19 @@
     <div class="container" ui-view="main"></div>
 
     <footer>
+      <script type="text/javascript">
+        google_ad_client = "ca-pub-7239713584471630";
+        google_ad_slot = "9256067456";
+        google_ad_width = 728;
+        google_ad_height = 90;
+      </script>
+      <!-- xrpvalue - leaderboard -->
+      <script type="text/javascript"
+              src="//pagead2.googlesyndication.com/pagead/show_ads.js">
+      </script>
+
+      <br />
+
       <a href="https://www.ripple.com" target="_blank">Ripple Website</a> -
       <a href="https://github.com/vhpoet/awesome-ripple" target="_blank">Awesome Ripple</a> -
       <a href="https://github.com/vhpoet/xrpvalue.com" target="_blank">Contribute</a> -
@@ -46,50 +60,6 @@
 
       ga('create', 'UA-46198230-1', 'xrpvalue.com');
       ga('send', 'pageview');
-    </script>
-
-    <script>
-      // Include the UserVoice JavaScript SDK (only needed once on a page)
-      UserVoice=window.UserVoice||[];(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/a1K1qXp8fnp1jxPJ0rs3oA.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})();
-
-      //
-      // UserVoice Javascript SDK developer documentation:
-      // https://www.uservoice.com/o/javascript-sdk
-      //
-
-      // Set colors
-      UserVoice.push(['set', {
-        accent_color: '#448dd6',
-        trigger_color: 'white',
-        trigger_background_color: '#448dd6'
-      }]);
-
-      // Identify the user and pass traits
-      // To enable, replace sample data with actual user traits and uncomment the line
-      UserVoice.push(['identify', {
-        //email:      'john.doe@example.com', // User’s email address
-        //name:       'John Doe', // User’s real name
-        //created_at: 1364406966, // Unix timestamp for the date the user signed up
-        //id:         123, // Optional: Unique id of the user (if set, this should not change)
-        //type:       'Owner', // Optional: segment your users by type
-        //account: {
-        //  id:           123, // Optional: associate multiple users with a single account
-        //  name:         'Acme, Co.', // Account name
-        //  created_at:   1364406966, // Unix timestamp for the date the account was created
-        //  monthly_rate: 9.99, // Decimal; monthly rate of the account
-        //  ltv:          1495.00, // Decimal; lifetime value of the account
-        //  plan:         'Enhanced' // Plan name for the account
-        //}
-      }]);
-
-      // Add default trigger to the bottom-right corner of the window:
-      UserVoice.push(['addTrigger', { mode: 'smartvote', trigger_position: 'bottom-right' }]);
-
-      // Or, use your own custom trigger:
-      //UserVoice.push(['addTrigger', '#id', { mode: 'smartvote' }]);
-
-      // Autoprompt for Satisfaction and SmartVote (only displayed under certain conditions)
-      UserVoice.push(['autoprompt', {}]);
     </script>
   </body>
 </html>
